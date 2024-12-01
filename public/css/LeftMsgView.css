@@ -1,0 +1,68 @@
+
+
+.leftMsgContainer{
+    display: flex;
+    gap: var(--gap-h)
+
+}
+
+
+.leftMsgSubContainer{
+    display: flex;
+}
+
+
+.leftMsg{
+
+    display: flex;
+
+    --border-radius: 1dvw;
+    border-radius: 0 var(--border-radius) var(--border-radius) var(--border-radius);
+    
+    background-color: var(--black-30);
+    padding: var(--padding-h);
+    gap: var(--gap-w);
+    
+    max-width: var(--max-msg-width);
+
+}
+
+.leftMsgContainer img{
+
+    --size: 5dvh;
+    width: var(--size);
+    height: var(--size);
+    border-radius: 50%;
+
+
+}
+
+.leftMsg .content{
+
+    color: var(--white);
+    word-break: break-word;
+
+
+}
+
+
+.leftMsgContainer .moreBtn{
+
+    display: flex;
+
+    cursor: pointer;
+    border-radius: var(--padding-h);
+    padding: var(--padding-h);
+    background-color: var(--black-150);
+
+}
+
+.leftMsgContainer .optionsBtn{
+    display: flex;
+
+    cursor: pointer;
+    border-radius: var(--padding-h);
+    padding: var(--padding-h);
+    background-color: var(--black-150);
+}
+

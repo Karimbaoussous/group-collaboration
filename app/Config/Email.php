@@ -4,8 +4,19 @@ namespace Config;
 
 use CodeIgniter\Config\BaseConfig;
 
-class Email extends BaseConfig
-{
+
+use App\Libraries\EnvReader;
+
+
+// $envReader = new EnvReader(array("path" => FCPATH .".env"));
+// $myEnv = $envReader->read();
+
+// echo ROOTPATH;
+// print_r($myEnv);
+
+
+class Email extends BaseConfig{
+
     public string $fromEmail  = '';
     public string $fromName   = '';
     public string $recipients = '';
@@ -18,7 +29,7 @@ class Email extends BaseConfig
     /**
      * The mail sending protocol: mail, sendmail, smtp
      */
-    public string $protocol = 'mail';
+    public string $protocol = 'smtp';
 
     /**
      * The server path to Sendmail.
@@ -28,22 +39,22 @@ class Email extends BaseConfig
     /**
      * SMTP Server Hostname
      */
-    public string $SMTPHost = '';
+    public string $SMTPHost = 'smtp.gmail.com';
 
     /**
      * SMTP Username
      */
-    public string $SMTPUser = '';
+    public string $SMTPUser = "";
 
     /**
      * SMTP Password
      */
-    public string $SMTPPass = '';
+    public string $SMTPPass = "";
 
     /**
      * SMTP Port
      */
-    public int $SMTPPort = 25;
+    public int $SMTPPort = 587; // 587 or 465 for SSL
 
     /**
      * SMTP Timeout (in seconds)
@@ -77,7 +88,7 @@ class Email extends BaseConfig
     /**
      * Type of mail, either 'text' or 'html'
      */
-    public string $mailType = 'text';
+    public string $mailType = 'html';
 
     /**
      * Character set (utf-8, iso-8859-1, etc.)
@@ -118,4 +129,12 @@ class Email extends BaseConfig
      * Enable notify message from server
      */
     public bool $DSN = false;
+
+
+    public function __construct(){
+
+        $this->SMTPUser = env("SMTP_USER");
+        $this->SMTPPass = env("SMTP_PASS");
+    
+    }
 }

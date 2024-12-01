@@ -1,0 +1,44 @@
+
+:root{
+
+    --padding: 10px;
+    --border-radius: calc(var(--padding) * 0.5);
+
+}
+
+
+.google-login-btn{
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--red-4);
+    color: var(--white);
+    border-radius: var(--border-radius);
+
+
+}
+
+
+.google-login-btn .icon{
+
+    background-color: var(--red);
+    color: var(--white);
+    padding: var(--padding);
+    border-radius: var(--border-radius);
+
+}
+
+.google-login-btn .tittle{
+
+    padding: 0 var(--padding);
+
+}
+
+.google-login-btn svg{
+
+    fill: var(--white);
+
+
+    
+}

@@ -1,0 +1,79 @@
+
+
+html, head, body{
+    width: 100%;
+    height: 100%;
+    margin: 0;
+
+}
+
+
+.chatView{
+
+    display: grid;
+    grid-template-columns: 0.2fr 1fr 4fr;
+    height: 100%;
+    background-color: var(--black);
+    gap: var(--gap-h);
+
+}
+
+
+.chatView .right{
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: var(--gap-h);
+
+    background: var(--black-30);
+    padding: var(--padding-h);
+    
+
+}
+
+
+.chatView .left{
+
+    display: grid;
+    grid-template-columns: 1fr;
+
+}
+
+
+.chatView .left .main{
+
+    position: relative;
+    
+    --bar-size: 0.6fr;
+
+    display: grid;
+    grid-template-rows: var(--bar-size) 4fr var(--bar-size);
+    overflow: auto;
+    gap: var(--gap-h);
+    
+    height: 100dvh;
+
+}
+
+
+.chatView .left .aside{
+    display: none;
+}
+   
+
+.chatView .left.four{
+
+    display: grid;
+    grid-template-columns: 4fr 2fr;
+    gap: var(--gap-h);
+
+}
+
+
+.chatView .left.four  .aside{
+    display: block;
+}
+   
+
+

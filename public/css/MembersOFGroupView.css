@@ -1,0 +1,190 @@
+
+.groupMembersView{
+
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    gap: 1dvh;
+
+    background-color: var(--black-10); 
+
+    overflow: hidden;
+    
+
+}
+
+
+.groupMembersView .groupInfos{
+
+    display: flex;
+    flex-direction: column;
+
+    background-color: var(--black-30);
+
+    gap: var(--gap-h);
+
+}
+
+
+.groupMembersView .groupInfos .header{
+
+    display: flex;
+
+
+    padding: var(--padding-w);
+    gap: var(--gap-w);
+
+
+}
+
+.groupMembersView .groupInfos .header .infos{
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    color: var(--black-200);
+
+    font-weight: bold;
+    text-transform: capitalize;
+    font-size: large;
+
+    cursor: default;
+    user-select: none;
+
+}
+
+
+
+.groupMembersView .groupInfos .mainInfos{
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    padding: var(--padding-w);
+    gap: var(--gap-h);
+
+
+}
+
+
+.groupMembersView .groupInfos .mainInfos .img{
+
+    height: 15dvh;
+    overflow: hidden;
+
+}
+
+
+.groupMembersView .groupInfos .mainInfos .img img{
+
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 50%;
+
+}
+
+
+
+.groupMembersView .title{
+
+    background-color: var(--black-30);
+    color: var(--black-200);
+    text-transform: capitalize;
+
+}
+
+
+
+.groupMembersView .members{
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-h);
+
+    height: 58dvh;;
+    overflow-y: auto;
+
+}
+
+
+.groupMembersView .members .membersContainer{
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--black-30);
+    gap:  var(--gap-h);
+    padding: var(--gap-h);
+    cursor: pointer;
+
+}
+
+
+.groupMembersView .members .membersContainer .admin{
+
+    background-color: var(--black-240);
+    color: var(--black);
+    padding: 1dvh 1dvw;
+    border-radius: 10%;
+    user-select: none;
+
+}
+
+.groupMembersView .members .membersContainer .remove{
+
+    background-color: var(--red-4);
+    color: var(--white);
+    padding: 1dvh 1dvw;
+    border-radius: 10%;
+    user-select: none;
+
+}
+
+
+
+
+.groupMembersView .members .membersContainer .infos{
+
+    display: flex;
+    align-items: center;
+
+    gap:  var(--gap-h);
+
+}
+
+.groupMembersView .members .membersContainer .infos .content{
+
+    display: flex;
+    flex-direction: column;
+
+}
+
+
+.groupMembersView .members .membersContainer .infos img{
+
+    --size: 5dvh;
+    width: var(--size);
+    height: var(--size);
+    border-radius: 50%;
+
+}
+
+
+.groupMembersView .members .membersContainer .infos .content .name{
+
+    text-overflow: ellipsis; /* Adds ellipsis (...) at the end */
+    color: var(--black-200);
+
+} 
+
+
+.groupMembersView .members .membersContainer .infos .content .description{
+    
+    color: var(--black-100);
+
+}

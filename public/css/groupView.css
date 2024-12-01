@@ -1,0 +1,78 @@
+
+.groupsView{
+
+       
+    display: flex;
+    flex-direction: column;
+    gap: 1dvh;
+
+    background-color: var(--black-10); 
+    /* padding: var(--padding-h) 0 var(--padding-h) 0 ; */
+
+    overflow: hidden;
+    
+
+}
+
+
+.groupsView .title{
+
+    background-color: var(--black-30);
+    color: var(--black-200);
+    padding: var(--gap-h);
+    user-select: none;
+
+}
+
+
+
+.groupsView .groups{
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-h);
+
+    overflow-y: auto;
+
+    
+}
+
+.groupsView .groups .groupContainer{
+
+    display: flex;
+    align-items: center;
+    background-color: var(--black-30);
+    gap:  var(--gap-h);
+    padding: var(--gap-h);
+    cursor: pointer;
+
+}
+
+.groupsView .groups .groupContainer .content{
+
+    display: flex;
+    flex-direction: column;
+
+}
+
+.groupsView .groups .groupContainer img{
+
+    --size: 5dvh;
+    width: var(--size);
+    height: var(--size);
+    border-radius: 50%;
+
+}
+
+.groupsView .groups .groupContainer .content .name{
+
+    text-overflow: ellipsis; /* Adds ellipsis (...) at the end */
+    color: var(--black-200);
+
+} 
+
+.groupsView .groups .groupContainer .content .description{
+    
+    color: var(--black-100);
+
+}

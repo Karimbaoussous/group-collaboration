@@ -1,0 +1,58 @@
+
+.rightMsgContainer{
+
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--gap-h)
+
+}
+
+
+.rightMsgSubContainer{
+    display: flex;
+    justify-content: flex-end;
+}
+
+
+.rightMsg{
+    
+    display: flex;
+    order: 1;
+    
+    --border-radius: 1dvw;
+    border-radius: var(--border-radius) 0  var(--border-radius) var(--border-radius);
+    
+    background-color: var(--black-25);
+    padding: var(--padding-h);
+    gap: var(--gap-w);
+
+    max-width: var(--max-msg-width);
+
+}
+
+
+.rightMsg .content{
+    
+    color: var(--white);
+    word-break: break-word;
+}
+
+.rightMsgContainer .moreBtn{
+
+    display: flex;
+
+    cursor: pointer;
+    border-radius: var(--padding-h);
+    padding: var(--padding-h);
+    background-color: var(--black-150);
+
+}
+
+.rightMsgContainer .optionsBtn{
+    display: flex;
+
+    cursor: pointer;
+    border-radius: var(--padding-h);
+    padding: var(--padding-h);
+    background-color: var(--black-150);
+}
