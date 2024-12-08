@@ -111,3 +111,26 @@ $routes->group(
 // $routes->get('(:any)', function () {
 //     return view('index.html');
 // });
+
+
+
+
+
+
+
+// Start of the routes for grpsPanel page
+$routes->get('panel', 'grpsPanel::index');
+$routes->get('privacyPolicy', 'grpsPanel::privacyPolicy');
+$routes->get('termsOfService', 'grpsPanel::termsOfService');
+$routes->get('/join-group/(:num)', 'GrpsPanel::joinGroup/$1');
+// end of the routes for grpsPanel page
+
+// Start of the routes for grpManage page
+$routes->get('/grpManage', 'GrpManageController::index'); // List of groups
+$routes->get('/grpManage/create', 'GrpManageController::create'); // Create new group form
+$routes->post('/grpManage/store', 'GrpManageController::store'); // Store new group (POST)
+$routes->get('/grpManage/update/(:segment)', 'GrpManageController::update/$1'); // Show update form for specific group
+$routes->post('/grpManage/updateSave/(:segment)', 'GrpManageController::updateSave/$1'); // Handle POST request to update group
+$routes->get('/grpManage/delete/(:segment)', 'GrpManageController::delete/$1'); // Delete group
+$routes->get('/grpManage/image/(:segment)', 'GrpManageController::showImage/$1');
+// end of the routes for grpManage page
