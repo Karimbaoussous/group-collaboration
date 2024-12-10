@@ -10,21 +10,20 @@
     
     class Profile extends BaseController{
 
-        private $userInSession, $userModel, $userInDB, $globalClass;
-
+        private $userInSession, $userModel, $userInDB, $globalClass, $imgy;
 
 
         public function __construct(){
 
             helper('form');
 
-            // $this->groupModel = new GroupModel();
-            // $this->msgModel =  new MsgModel();
             $this->userModel = new UserModel();
             $this->userInSession = session()->get('user');
             $this->userInDB = $this->userModel->getUserByEmail($this->userInSession['email']);
 
             $this->globalClass = new GlobalC();
+
+            $this->imgy = new Img();
 
         }
 
@@ -33,41 +32,25 @@
 
             // echo "hi";
 
-            return view("frontend/browser/index");
+            try{
+
+                return view("frontend/browser/index");
+
+            }catch(Exception $e){
+
+                return view(
+                    "Global/alert", 
+                    array(
+                        "msg" => "Error: " . $e->getMessage(),
+                        "redirect" => 'login/'
+                    )
+                );
+
+            }
   
 
         }
 
-        
-        private function getLink($img): string{
-
-
-            $sessionID = session()->session_id;
-            $userInSession = session()->get($sessionID);
-            $imgsLink = $userInSession? $userInSession['imgsLink']: array();
-
-            $link = $this->globalClass->serverAPI . "profile/img/";
-
-            $index = array_search($img,  $imgsLink);
-
-            if ($index !== false) {// exists
-
-                $link .= $index;
-
-            }else{
-
-                $imgsLink[] = $img;
-                $link .= sizeof($imgsLink) - 1;
-
-            }
-
-            $userInSession['imgsLink'] = $imgsLink;
-            session()->set($sessionID, $userInSession);
-
-            return $link;
-
-        }
-      
 
         public function load(){
 
@@ -76,12 +59,14 @@
                 //retrieve session data
                 if($this->userInSession == null){
                     return $this->response->setJSON(
-                        array( 'error' =>  "you must login first")
+                        array( 'alert' =>  "you must login first" .$this->userInSession )
                     );
                 }
 
-                $img =$this->userInDB["image"];
-                $this->userInDB["image"] = $img?$this->getLink($img): $img;
+                $this->userInDB["image"] = $this->imgy->getLink(
+                    $this->userInDB["id"], 
+                    "user"
+                );
 
                 // echo $data;
                 return $this->response->setJSON(
@@ -99,47 +84,8 @@
           
         }
 
-
-        public function displayImg($index){
-
-            $sessionID = session()->session_id;
-            $userInSession = session()->get( $sessionID);
-
-            if(!isset($userInSession['imgsLink'])){
-                echo "login first";
-                return;
-            }
-
-            $imgsLink = $userInSession['imgsLink'];
-
-            $img = $imgsLink[$index];
-
-            // $filePath = ROOTPATH . '/public/myfile.webp'; 
-            // $result = file_put_contents(filename: $filePath, data: $img);
-            // echo ROOTPATH . '/myfile.webp' . "<br>" .$result;
-
-            if ($img) {
-
-                // $base64Image = 'data:image/webp;base64,' . base64_encode($img);
-
-                // $this->response->setHeader('Content-Type', "image/webp");
-                // return $this->response->setBody($img);
-
-                $randomName = uniqid(rand(), true);
-
-                return $this->response->download(
-                    $randomName .".webp",
-                    data: $img
-                );
-
-            } else {
-                return $this->response->setStatusCode(404, 'Image not found');
-            }
-
-        } 
-  
         
-        public function img(){
+        public function updateImage(){
 
             try{
 
@@ -287,6 +233,78 @@
                 // echo $data;
                 return $this->response->setJSON(
                     body: array( 'status' =>  1)
+                );
+
+
+            }catch(Exception $e){
+       
+                return $this->response->setJSON(
+                    array( 'error' =>  "My Error Handler: ". $e->getMessage())
+                );
+
+            }
+          
+        }
+
+
+        public function remove(){
+
+            try{
+
+                //retrieve session data
+                if($this->userInSession == null){
+                    return $this->response->setJSON(
+                    array( 
+                        'alert' =>  "An error was acquired while deleting you data"
+                        )
+                    );
+                }
+
+                $keys = ["email"];
+                // password, confirm password
+                $data = $this->request->getPost(index: $keys);
+
+                // Checks whether the submitted data passed the validation rules.
+                if (! $this->validateData($data, [
+                    "email" => 'valid_email|max_length[100]|min_length[4]',
+                ])) {
+
+                    $error = "";
+                    foreach($keys as $key){
+                        if(isset($this->validator->getErrors()[$key])){
+                            $error .= $this->validator->getErrors()[$key] . "\n";
+                        }
+                    }
+                   
+                    // The validation fails, so returns the form.
+                    return $this->response->setJSON(
+                        array( 'alert' => $error)
+                    );
+
+                }
+        
+                // Gets the validated data.
+                $post = $this->validator->getValidated();
+
+                $error = $this->userModel->remove($post['email']);
+
+                // return $this->response->setJSON(
+                //     body: array( 'msg' =>  $error)
+                // );
+
+                session()->destroy();
+                $this->userInSession = null;
+
+                if(gettype($error) == "string"){
+
+                    return $this->response->setJSON(
+                        body: array( 'msg' =>  $error)
+                    );
+
+                }
+                
+                return $this->response->setJSON(
+                    body: array( 'success' =>  "ok")
                 );
 
 

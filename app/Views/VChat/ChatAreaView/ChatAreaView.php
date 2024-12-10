@@ -12,6 +12,8 @@
 
         overflow-y: auto;
         gap: var(--gap-h);
+        
+        user-select: none;
 
     }
 
@@ -82,7 +84,11 @@
         function toValidDate($date){
             return (new Datetime($date))->format('Y-m-d');
         }
-
+        
+        function toValidTime($date){
+            // 12-hour format with AM/PM
+            return (new DateTime($date))->format('h:i A'); 
+        }
 
         //sort msg by date
         usort(
@@ -100,7 +106,10 @@
             $msg = $msgs[$i];
 
             $msg['index'] = $msg['id'];
-            $msg['date'] = toValidDate($msg['date']);
+            $originalDate = $msg['date'];
+
+            $msg['date'] = toValidDate($originalDate);
+            $msg['time'] = toValidTime($originalDate);
 
             // display unique date at the top only
             if( $msg['date'] != $oldDate){
@@ -142,6 +151,8 @@
     ?>
 
 </main>
+
+
 
 
 <script>

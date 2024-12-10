@@ -161,3 +161,21 @@ form *{
 
 
 }
+
+
+.footer {
+
+    /* 
+    display: grid;
+    gap: var(--gap-w); 
+    */
+    text-align: center;
+
+}
+
+
+.footer a{
+
+    color: var(--blue-3);
+
+}

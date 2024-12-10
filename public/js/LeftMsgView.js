@@ -3,6 +3,8 @@
 
 function handleLeftMsgContainerMouseEnter(leftMsgContainer){
 
+    const divContainer = leftMsgContainer.parentElement
+
     const optionsContainer = document.createElement("div");
 
     optionsContainer.style.cssText = `
@@ -13,19 +15,19 @@ function handleLeftMsgContainerMouseEnter(leftMsgContainer){
     `;
 
     const moreBtn = document.createElement("div");
+
     const btnsContainer = document.createElement('div');
+    btnsContainer.classList.add('btnsContainer');
 
     moreBtn.innerText = "..."
     moreBtn.classList.add("moreBtn");
     
     moreBtn.onmouseenter = ()=>{
 
-        const divContainer = leftMsgContainer.parentElement
-
         btnsContainer.innerHTML = `
             <div class="optionsBtn" onclick="removeMsg('${ divContainer.id}')">
                 remove 
-            <div>
+            </div>
         `;
 
         optionsContainer.appendChild(btnsContainer);

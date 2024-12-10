@@ -30,7 +30,7 @@
 
             }catch(Exception $e){
 
-                echo $e->getMessage();
+                return $e->getMessage();
 
             }
           

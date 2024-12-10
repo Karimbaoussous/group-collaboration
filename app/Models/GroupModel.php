@@ -8,63 +8,41 @@
 
     class GroupModel extends Model {
 
-        public $userID, $userModel;
+        public $userModel;
 
         public function __construct(){
 
             parent::__construct(); // load database
 
-
-            // $user = session()->get('user');
-            // if(!$user) throw new Exception('invalid request');
-            // $userModel = new UserModel(); 
-            // $this->userID = $userModel->getUserIDByEmail(email: $user['email']);
-
         }
 
 
-        // public function add($msg){
+        public function exists($title){
         
-        //     try{
+            try{
 
-        //         $this->db->query(
-        //             "
-        //                 insert into msg (
-        //                     body
-        //                 ) values (
-        //                     ?
-        //                 )
-        //             ", array(
-        //                 $msg
-        //             )
-        //         );
+                $query = $this->db->query(
+                    "
+                        select count(*) as num from grp 
+                        where title = ?
+                    ", array(
+                        $title,
+                    )
+                );
 
-        //         $msgID = $this->db->insertID();
 
-        //         $this->db->query(
-        //             "
-        //                 insert into send (
-        //                     user, msg
-        //                 ) values (
-        //                     ?, ?
-        //                 )
-        //             ", array(
-        //                 $this->userID, $msgID
-        //             )
-        //         );
+                return $query->getRowArray()["num"] == 1;
 
-        //         return true;
+            }catch(Exception $e ){
 
-        //     }catch(Exception $e ){
 
-        //         return false;
+                return "Error: " . $e->getMessage();
 
-        //     }
+            }
             
-        // }
+        }
 
 
-    
         public function getAll(){
         
             try{
@@ -197,7 +175,7 @@
         }
 
 
-        public function getPublicNotJoined($userID){
+        public function getPublicNotJoinedNotInvited($userID){
         
             try{
 
@@ -208,8 +186,12 @@
                         id not in (
                             select grp from joinGroup 
                             where user = ?
-                        );
-                ", array($userID));
+                        )
+                    and id not in (
+                        select grp from invite 
+                        where user = ?
+                    );
+                ", array($userID, $userID));
 
                 return $query->getNumRows() > 0?  $query->getResultArray(): null;
 
@@ -301,12 +283,15 @@
                         (
                             id in ( select grp from joinGroup where user = ? ) 
                             or
-                            isPublic = ?
+                            (
+                                isPublic = ? and 
+                                id not in ( select grp from invite where user = ? )
+                            )
                         )
                         and
                         title like CONCAT('%', ?, '%');
                     ", 
-                    array($userID, $isPublic, $title)
+                    array($userID, $isPublic, $userID, $title)
                 );
 
                 return $query->getResultArray();
@@ -319,25 +304,75 @@
             
         }
 
-        
+
+        private function removeAllMsgsOFuserInGroup($userID, $groupID){
+
+
+            $query = $this->db->query(
+                "
+                    select msg as id from send 
+                    where 
+                        user = ? and grp = ?
+                ",
+                array($userID, $groupID)
+            );
+
+
+            // delete link to msgs
+            $this->db->query(
+                "
+                    delete from send 
+                    where user = ? and grp = ?
+                ",
+                array($userID, $groupID)
+            );
+
+            $msgs =  $query->getResultArray();
+
+            foreach($msgs as $msg){
+
+                $this->db->query(
+                    "delete from msg where id = ?",
+                    array($msg["id"])
+                );
+
+            }
+
+            $msgs = array(); // free memory space
+
+        }
+
+
         public function removeJoinedMember($groupID, $memberID){
         
             try{
 
-                $query = $this->db->query("
+                $this->db->transBegin();
+
+                $this->removeAllMsgsOFuserInGroup(
+                    userID: $memberID, 
+                    groupID: $groupID
+                );
+
+                $this->db->query("
                     delete from joinGroup 
-                    where grp = ? and user = ?
+                    where 
+                        grp = ? and user = ?
                 ", 
                     array(
                         $groupID, $memberID
                     )
                 );
 
+                $this->db->transCommit();
+
                 return true;
 
             }catch(Exception $e ){
 
-                return false;
+                $this->db->transRollback();
+
+                return $e->getMessage();
 
             }
             
@@ -356,7 +391,7 @@
                     binds: array($groupID)
                 );
 
-                return $query->getNumRows() > 0;
+                return $query->getRowArray()["num"] > 0;
 
             }catch(Exception $e ){
 
@@ -389,8 +424,36 @@
             
         }
 
+        
+        public function isItLastMsgInThatDay($groupID, $msgID){
+        
+            try{
 
+                $query = $this->db->query("     
+                    select
+                        count(*) as num 
+                    from 
+                        send, 
+                        (select date, grp from send where grp = ? and msg = ?) as dt
+                    where
+                        DATEDIFF(send.date, dt.date) = 0 and 
+                        send.grp = dt.grp and 
+                        send.grp  = ?
+                    ;
+                ",
+                    binds: array( $groupID, $msgID, $groupID )
+                );
 
+                // will return message it self only
+                return $query->getRowArray()["num"] == 1;
+                
+            }catch(Exception $e ){
+
+                return false;
+
+            }
+            
+        }
 
 
         

@@ -59,6 +59,7 @@ html, head, body{
 
 .chatView .left .aside{
     display: none;
+    max-height: 100dvh;
 }
    
 
@@ -72,8 +73,15 @@ html, head, body{
 
 
 .chatView .left.four  .aside{
+    overflow: auto;
     display: block;
 }
    
 
 
+
+#groupsAside{
+
+    overflow: auto;
+
+}

@@ -12,17 +12,19 @@
     // create elements to test
     $groupMembers = [];
 
-    function testMembersOfGroup(){
+    function testUsersXInDB(){
 
         $list = [];
+
         for($i=0; $i< 100; $i++){
-            $list[$i] = array(
+            $list[] = array(
                 "id" => $i,
                 "image" => base_url("imgs/img.png"),
                 "username" => "username $i",
                 "about" => "about me $i"
             );
         }
+
         return $list;
 
     }
@@ -39,11 +41,7 @@
 
 <aside class="groupMembersView">
 
-
-
-
     <section class="groupInfos">
-
     
         <header class="header">
 
@@ -78,6 +76,8 @@
             <div class="title" id="membersNumber">
                 <?= sizeof( $groupMembers). " members"?>
             </div>
+            
+
         </main>
 
     </section>
@@ -102,7 +102,7 @@
                 echo view(
                     "VChat/MembersOfGroupView/MemberOfGroupView",
                     array(
-                        "member"=> $member,
+                        "member"=> $member
                     )
                 );
 
@@ -113,51 +113,4 @@
 
 
 </aside>
-
-
-<script>
-
-  
-    async function handleGroupMembersSearch(searchValue){
-
-        const formData = new FormData();
-
-        formData.append('search', searchValue);
-
-        const response = await fetch("/member/search", {
-            method: 'post',
-            body: formData,
-            credentials: 'include', // Enables session
-        })
-
-        if(!response.ok){
-            console.log("not ok response");
-        }
-
-        const data = await response.json();
-
-        if("error" in data){
-            alert(data['error'])
-            return;
-        }else if ("msg" in data){
-            console.log(data['msg'])
-            return;
-        }else if("html" in data){
-
-            // console.log(data['html'])
-
-            const groupMembers = document.getElementById('groupMembers');
-            groupMembers.innerHTML = data['html']
-            const membersNumber = document.getElementById('membersNumber');
-            membersNumber.innerHTML = data['membersNumber'] + " Members";
-
-        }
-
-
-}
-
-
-
-</script>
-
 

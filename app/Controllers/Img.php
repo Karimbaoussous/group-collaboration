@@ -4,6 +4,7 @@
 
     use App\Models\GroupModel;
     use App\Models\UserModel;
+use Exception;
 
     class Img extends BaseController{
 
@@ -22,8 +23,12 @@
 
 
             $sessionID = session()->session_id;
-            $userInSession = session()->get($sessionID);
-            $imgsLink = $userInSession? $userInSession['imgsLink']: array();
+            $userInSession = session()->get(key: $sessionID);
+
+            $imgsLink = array();
+            if($userInSession && isset($userInSession['imgsLink'])){
+                $imgsLink = $userInSession['imgsLink'];
+            }
 
             $link = base_url("img/");
 
@@ -45,16 +50,19 @@
             }
 
             $userInSession['imgsLink'] = $imgsLink;
-            session()->set($sessionID, $userInSession);
+            session()->set(
+                $sessionID, 
+                $userInSession
+            );
 
             return $link;
 
         }
         
         
-        public function setLinks(
-            $table, $att1 = "image", $id = "id", $modelName
-        ){
+        public function setLinks($table, $att1 = "image", $id = "id", $modelName){
+
+            if(!$table) return $table;
 
             for($i = 0; $i< sizeof(value: $table); $i++){ 
                 $table[$i][$att1] = $this->getLink( 
@@ -79,7 +87,10 @@
 
             $imgsLink = $userInSession['imgsLink'];
 
-          
+            // print_r($imgsLink);
+            // echo   $index;
+            // return;
+
             $formula = $imgsLink[$index];
 
             if ($formula) {
@@ -102,14 +113,20 @@
                     $img = $this->userModel->getImg($id);
 
                 }
-// 
+ 
                 // echo "forme  $formula";
                 // echo " <br> <br> $img";
 
-                return $this->response->download(
-                    filename: $randomName .".webp",
-                    data: $img
-                );
+                if($img){
+                    return $this->response->download(
+                        filename: $randomName .".webp",
+                        data: $img
+                    );
+                }else{
+                    // no image found case
+                    return redirect()->to("icons/userWhite.png");
+                }
+                
 
             } else {
                 return $this->response->setStatusCode(404, 'Image not found');

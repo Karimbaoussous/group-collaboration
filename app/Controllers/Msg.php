@@ -4,20 +4,27 @@
 
     use App\Models\GroupModel;
     use App\Models\MsgModel;
-    use App\Models\UserModel;
+    use App\Models\SendModel;
+use App\Models\UserModel;
 use Exception;
 
     class Msg extends BaseController{
 
 
-        private $msgModel, $userModel, $userInDB, $groupModel;
+        private $msgModel, $userModel, $userInDB, $groupModel, $sendModel;
 
         public function __construct(){
 
             $this->groupModel = new GroupModel();
             $this->msgModel =  new MsgModel();
             $this->userModel = new UserModel();
+            $this->sendModel = new SendModel();
             $userInSession = session()->get('user');
+
+            if(!$userInSession){
+                throw new Exception("Something went wrong, You must login again!");
+            }
+
             $this->userInDB = $this->userModel->getUserByEmail($userInSession['email']);
 
 
@@ -33,12 +40,12 @@ use Exception;
 
             $hasMsgs = $this->groupModel->hasMsgs($groupID);
 
-
-            // $out = "$lastDate";
+            // $out = "$lastDate - $hasMsgs";
+            // return $out;
 
             if( 
                 $lastDate != date('Y-m-d') || 
-                ! $hasMsgs
+                !$hasMsgs
             ){
 
                 $out .= view(
@@ -68,10 +75,30 @@ use Exception;
 
             $msg = $this->request->getPost(index: 'msg');
 
+            if( strlen(string: trim($msg) ) <= 0 ){
+                return $this->response->setJSON(
+                    array( 
+                        'error' => 'please type something'
+                    )
+                );
+            }
+
             // check before adding msg
             $htmlMSG = $this->addDateIfPossible($group['id']);
 
+            // return $this->response->setJSON(
+            //     array( 
+            //         'msg' => "hi - " . $group['id']
+            //     )
+            // );
+
             $msgID = $this->msgModel->add($msg,  $group['id']);
+
+            // return $this->response->setJSON(
+            //     array( 
+            //         'msg' => "hi - " . $group['id']
+            //     )
+            // );
 
 
             if($msgID == false){
@@ -87,6 +114,7 @@ use Exception;
                 array(
                     "body"          => $msg,
                     "date"          => date("Y-m-d"),
+                    "time"          => date("h:i A"),
                     "index"         => $msgID,
                     "autoScroll"    => true,
                 )
@@ -103,28 +131,89 @@ use Exception;
 
 
         public function update(){
-            echo "update msg";
+
+            //check group existence
+            $group = session()->get(key: 'group');
+
+            if(!$group){
+                return $this->response->setJSON(
+                    array( 'alert' => 'please select a group')
+                );
+            }
+
+            
+            if(!$this->userInDB){
+                return $this->response->setJSON(
+                    array( 'alert' => 'please login')
+                );
+            }
+
+        
+
+            $msgID = $this->request->getPost(index: 'id');
+            $msg = $this->request->getPost(index: 'content');
+
+            if(strlen(trim($msg)) <= 0){
+                return $this->response->setJSON(
+                    array( 'alert' => 'please type something')
+                );
+            }
+
+            // return $this->response->setJSON(
+            //     array( 
+            //         'msg' => "$msg - $msgID - " . $group['id']
+            //     )
+            // );
+
+
+            $senderID = $this->sendModel->getSenderIdByMsgID( $msgID);
+
+            if(!$senderID){
+                return $this->response->setJSON(
+                    array('error' => "An error acquired while updating you msg")
+                );
+            }
+
+            if($senderID != $this->userInDB['id']){
+                return $this->response->setJSON(
+                    array('error' => "You are not allowed to delete this message")
+                );
+            }
+
+
+            $error = $this->msgModel->updateMsg( $msgID,  $msg);
+
+
+            if(gettype($error) == 'string'){
+                return $this->response->setJSON(
+                    array('error' => $error)
+                );
+            }
+
+
+            return $this->response->setJSON(
+                array( 
+                    'success' => true,
+                )
+            );
+           
         }
 
 
-        public function get(){
-            echo "get msg";
-        }
 
-
-        private function getDateToRemoveID( $groupID){
+        private function getDateToRemoveID( $groupID, $msgID){
 
             $out = "";
 
-            $lastDate = $this->msgModel->getLastSentDate($groupID);
+            $status = $this->groupModel->isItLastMsgInThatDay($groupID, $msgID);
 
-            // $out = "$lastDate";
+            // return $status;
 
-            $now = date('Y-m-d');
+            if($status){
 
-            if( $lastDate != $now ){
+                $date =  $this->msgModel->getSentDate($groupID, $msgID);
 
-                $out .= "MDV$now";
+                $out .= "MDV$date";
 
             }
 
@@ -175,7 +264,14 @@ use Exception;
                         array( 'error' => "you can't remove this msg")
                     );
                 }
-            
+
+                // this must be called before removing a msg
+                $divID = $this->getDateToRemoveID($group['id'], $msgID);
+
+                // return $this->response->setJSON(
+                //     array( 'msg' => $divID)
+                // );
+
                 $status = $this->msgModel->remove($msgID,  groupID: $group['id']);
 
                 if(!$status){
@@ -183,9 +279,7 @@ use Exception;
                         array( 'error' => 'an error acquired while sending you msg')
                     );
                 }
-
-                $divID = $this->getDateToRemoveID($group['id']);
-
+            
                 if($divID){
 
                     return $this->response->setJSON(
@@ -195,7 +289,7 @@ use Exception;
                 }else{
 
                     return $this->response->setJSON(
-                        array( 'msg' => "success  $status")
+                        array( 'status' => "success  $status")
                     );
                 }
 

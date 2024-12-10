@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Models\GroupModel;
+
 use App\Models\JoinGroupModel;
 use App\Models\panelModel;
 

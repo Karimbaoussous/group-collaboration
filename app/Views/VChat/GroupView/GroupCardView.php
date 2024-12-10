@@ -4,10 +4,10 @@
     <img src="<?=$group['image']?>" alt="group img">
 
     <div class="content">
-        <div class="name">
+        <div class="name endText">
             <?=$group['title']?>
         </div>
-        <div class="description">
+        <div class="description endText">
             <?=$group['description']?>
         </div>
     </div>

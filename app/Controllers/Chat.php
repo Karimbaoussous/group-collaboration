@@ -3,7 +3,6 @@
     namespace App\Controllers;
 
     use App\Models\GroupModel;
-    use App\Models\MsgModel;
     use App\Models\UserModel;
 
     class Chat extends BaseController{
@@ -17,6 +16,16 @@
             session()->set('group', null);
 
             $this->userInSession = session()->get('user');
+
+            if(!$this->userInSession){
+                return view( "Global/alert", 
+                    array(
+                        "msg" => "Something went wrong, You must login again!",
+                        "redirect" => "/login"
+                    )
+                );
+            }
+
 
             $this->userModel = new UserModel();
             $this->userInDB = $this->userModel->getUserByEmail(
@@ -34,7 +43,7 @@
 
             $groupModel = new GroupModel();
             $groups1 =  $groupModel->getJoined($this->userInDB['id']);
-            $groups2 =  $groupModel->getPublicNotJoined($this->userInDB['id']);
+            $groups2 =  $groupModel->getPublicNotJoinedNotInvited($this->userInDB['id']);
 
             // return $this->response->setJSON(array(
             //     "msg" =>  $groups2)
@@ -42,7 +51,12 @@
 
          
 
-            $groups = $groups1? array_merge($groups1, $groups2): $groups2;
+            $groups = $groups1;
+            if($groups1 && $groups2){
+                $groups =array_merge($groups1, $groups2);
+            }else if( $groups2){
+                $groups = $groups2;
+            }
             
 
             //give each image a link
@@ -56,14 +70,15 @@
                 );  
                   
             }
-            // print_r(value: $groups );
-            // return;
+
+
 
             return view(
                 'VChat/chatView', 
                 array(
-                    "user"      => $this->userInSession,
-                    "groups"    => $groups
+                    "user"          => $this->userInSession,
+                    "groups"        => $groups,
+                    "invitations"   => []
                 )
             );
           

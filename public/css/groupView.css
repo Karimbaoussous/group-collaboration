@@ -53,6 +53,10 @@
     display: flex;
     flex-direction: column;
 
+    white-space: nowrap;     /* Prevents text wrapping */
+    overflow: hidden;        /* Hides overflowing text */
+    text-overflow: ellipsis; /* Adds ellipsis (...) to truncated text */
+
 }
 
 .groupsView .groups .groupContainer img{
@@ -66,7 +70,10 @@
 
 .groupsView .groups .groupContainer .content .name{
 
-    text-overflow: ellipsis; /* Adds ellipsis (...) at the end */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    
     color: var(--black-200);
 
 } 
@@ -74,5 +81,8 @@
 .groupsView .groups .groupContainer .content .description{
     
     color: var(--black-100);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 
 }

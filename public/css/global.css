@@ -10,7 +10,7 @@
     --red-3: rgb(254, 30, 30);
     --red-4: rgb(254, 40, 40);
     --red-5: rgb(254, 50, 50);
-    --red-6: rgb(255, 0, 0);
+    --red-6: rgb(255, 60, 60);
     --black-10: rgb(10, 10, 10);
     --black-20: rgb(20, 20, 20);
     --black-25: rgb(25, 25, 25);
@@ -26,14 +26,22 @@
     --black-225: rgb(225, 225, 225);
     --black-240: rgb(240, 240, 240);
 
+    --gray: gray;
+    --blue: rgb(55, 189, 241);
+    --blue-2: rgb(4, 129, 179);
+    --blue-3: rgb(110, 214, 255);
+
     --padding-h: 1dvh;
     --padding-w: 1dvw;
+
+    --margin-h: 1dvh;
+    --margin-w: 1dvw;
 
     --gap-h: 1dvh;
     --gap-w: 1dvw;
 
     --max-msg-width: 50dvw;
-
+    --min-msg-width: 20dvw;
     --scroll-bar-border-radius: 1dvw;
     
 }
@@ -84,4 +92,36 @@ a{
 
 ::-webkit-scrollbar-corner {
     background: #000;
+}
+
+
+.errors{
+
+    position: absolute;
+    top: 0;
+    display: flex;
+    gap: var(--gap-w);
+    padding: calc(var(--padding-w) * 2);
+    margin: var(--margin-w);
+    background-color: var(--red);
+    color: var(--white);
+    border-radius: var(--padding-w);
+
+}
+
+
+.errors ul{
+
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+
+.endText{
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
 }

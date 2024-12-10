@@ -3,7 +3,7 @@
     namespace App\Libraries;
 
     use App\Models\UserModel;
-use CodeIgniter\HTTP\Response;
+    use CodeIgniter\HTTP\Response;
 
     class MyCookie{
 
