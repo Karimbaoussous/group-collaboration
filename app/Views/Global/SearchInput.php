@@ -1,6 +1,7 @@
 
 <style>
 
+
     .searchInput{
 
         display: flex;
@@ -12,12 +13,12 @@
 
     }
 
+
     .searchInput .search{
 
         width: 100%;
         
     }
-
 
 
 </style>
@@ -38,7 +39,7 @@
                         container = container.parentElement;
                     }
 
-                    let input = container.children[2];
+                    let input = container.children[1];
                     
                     $jsFunction
                 }
@@ -59,7 +60,10 @@
             )
     ) ?>
   
-    <input type="text" name="search" class="search">
+    <input 
+        type="text" name="search" class="search" 
+        placeholder="<?=isset($placeholder)? esc($placeholder): "searching..." ?>"
+    >
 
 </div>
 

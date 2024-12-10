@@ -5,7 +5,7 @@ async function handleGroupInfosClick(groupID){
     const chatViewLeft = document.getElementById('chatViewLeft');
     const chatViewLeftAside = document.getElementById('chatViewLeftAside');
 
-    if( chatViewLeft.classList.contains("four")){
+    if(chatViewLeft.classList.contains("forMembers")){
 
         // i must make a backend function to prevent this later
         console.log("maybe group members view is already opened");
@@ -31,16 +31,19 @@ async function handleGroupInfosClick(groupID){
 
     if("error" in data){
         alert(data['error'])
-        return;
+        return false;
     }else if ("msg" in data){
         console.log(data['msg'])
-        return;
+        return false;
     }else if("html" in data){
         
         // display members area
         chatViewLeft.classList.add("four"); // add style
+        chatViewLeft.classList.add("forMembers"); // add style
 
         chatViewLeftAside.innerHTML = data['html']
+
+        return true;
         
     }
 

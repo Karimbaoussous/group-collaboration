@@ -5,6 +5,8 @@
     use App\Models\GroupModel;
     use App\Models\MsgModel;
     use App\Models\UserModel;
+
+
     use Exception;
 
     class Group extends BaseController{
@@ -13,6 +15,8 @@
         private $groupModel, $msgModel, $userInSession, $userModel, $userInDB, $img;
 
         public function __construct(){
+
+            helper("form");
 
             $this->groupModel = new GroupModel();
             $this->msgModel =  new MsgModel();
@@ -57,6 +61,14 @@
 
             try{
 
+                if(!$this->userInSession){
+                    return $this->response->setJSON(
+                        array(
+                            "alert" => "Something went wrong, You must signUp again!"
+                        )
+                    );
+                }
+
                 $groupID = $this->request->getPost(index: 'id');
             
                 $groupData = $this->groupModel->getByID($groupID);
@@ -76,7 +88,7 @@
                 }
 
 
-                $userJoinedGroup = $this->groupModel->isJoinedBy(
+                $isMember = $this->groupModel->isJoinedBy(
                     $this->userInDB['id'], 
                     $groupID
                 );
@@ -87,7 +99,7 @@
                 //     )
                 // );
 
-                if(!$userJoinedGroup){
+                if(!$isMember){
                     return $this->response->setJSON(
                         array( 'joinRequest' =>  "true")
                     );
@@ -131,6 +143,9 @@
                     value: $groupData
                 );
 
+                // return $this->response->setJSON(
+                //     array( 'msg' =>  "htmlMSG")
+                // );
 
                 return $this->response->setJSON(
                     array( 'html' =>  $htmlMSG)
@@ -177,7 +192,6 @@
                     "group"
                 );
 
-
                 $htmlMSG = "";
                 
                 foreach($groups as $group){
@@ -190,6 +204,7 @@
                     );
                     
                 }
+              
 
                 // echo $data;
                 return $this->response->setJSON(
@@ -214,6 +229,14 @@
         public function join(){
 
             try{
+
+                if(!$this->userInSession){
+                    return $this->response->setJSON(
+                        array(
+                            "alert" => "Something went wrong, You must login again!"
+                        )
+                    );
+                }
 
                 $groupID = $this->request->getPost(index: 'id');
             
@@ -303,7 +326,7 @@
                 return $this->response->setJSON(
                     array( 'html' =>  $htmlMSG)
                 );
-
+                
             }catch(Exception $e){
        
                 return $this->response->setJSON(
@@ -396,6 +419,67 @@
                 );
 
             }
+
+        }
+
+
+        public function section(){
+
+            try{
+
+                if(!$this->userInSession){
+                    return $this->response->setJSON(
+                        array(
+                            "alert" => "Something went wrong, You must login again!"
+                        )
+                    );
+                }
+
+                $groups1 =  $this->groupModel->getJoined($this->userInDB['id']);
+                $groups2 =  $this->groupModel->getPublicNotJoinedNotInvited($this->userInDB['id']);
+
+
+                $groups = $groups1;
+                if($groups1 && $groups2){
+                    $groups =array_merge($groups1, $groups2);
+                }else if( $groups2){
+                    $groups = $groups2;
+                }
+            
+                
+                //give each image a link
+                if($groups){
+
+                    $groups = $this->img->setLinks(
+                        table: $groups, 
+                        att1: "image",
+                        id: "id",
+                        modelName: "group"
+                    );  
+                    
+                }
+
+                
+                $html = view(
+                    "VChat/GroupView/GroupView", 
+                    array(
+                        "groups" => $groups,
+                        "invitations" => []
+                    )
+                );
+
+                return $this->response->setJSON(
+                    array( 'html' => $html)
+                );
+
+            }catch(Exception $e){
+       
+                return $this->response->setJSON(
+                    array( 'error' =>  "My Error Handler: ". $e->getMessage())
+                );
+
+            }
+
 
         }
 

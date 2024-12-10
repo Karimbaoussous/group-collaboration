@@ -42,6 +42,11 @@ async function handleSendMsgBtnClick(){
 
     const data = await response.json();
 
+    if("msg" in data){
+        console.log(data['msg'])
+        return;
+    }
+
     if("error" in data){
         alert(data['error'])
         return;

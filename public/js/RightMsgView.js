@@ -5,6 +5,8 @@ function handleRightMsgContainerMouseEnter(rightMsgContainer){
 
     // console.log("debug")
 
+    const divContainer = rightMsgContainer.parentElement
+
     const optionsContainer = document.createElement("div");
 
     optionsContainer.style.cssText = `
@@ -18,19 +20,48 @@ function handleRightMsgContainerMouseEnter(rightMsgContainer){
     `;
 
     const moreBtn = document.createElement("div");
+
     const btnsContainer = document.createElement('div');
+    btnsContainer.classList.add("btnsContainer")
 
     moreBtn.innerText = "..."
     moreBtn.classList.add("moreBtn");
+
+    `
+
+    <optionsContainer>
+
+        <moreBtn class="moreBtn">
+            ...
+        </moreBtn>
+
+        <btnsContainer>
+
+            <editBtn class="optionsBtn" onclick="updateMsg('${divContainer.id}')">
+                edit 
+            </div>
+
+            <removeBtn class="optionsBtn" onclick="removeMsg('${divContainer.id}')">
+                remove 
+            </div>
+
+        </btnsContainer>
+
+    </optionsContainer>
+    `
     
     moreBtn.onmouseenter = ()=>{
-
-        const divContainer = rightMsgContainer.parentElement
                 
         btnsContainer.innerHTML = `
+
             <div class="optionsBtn" onclick="removeMsg('${divContainer.id}')">
                 remove 
-            <div>
+            </div>
+
+            <div class="optionsBtn" onclick="updateMsg('${divContainer.id}')">
+                edit 
+            </div>
+           
         `;
 
         optionsContainer.appendChild(btnsContainer);
@@ -68,53 +99,5 @@ function handleRightMsgContainerMouseLeave(rightMsgContainer){
     }
 
     
-}
-
-
-async function removeMsg(containerID){
-
-    // console.log(containerID)
-    
-    const formData = new FormData();
-
-    let msgID = String(containerID);
-    if(msgID.includes('rightMsgContainer')){
-        msgID =  msgID.replaceAll('rightMsgContainer', "")
-    }else if(msgID.includes('leftMsgContainer')){
-        msgID = msgID.replaceAll('leftMsgContainer', "")
-    }else{
-        throw new Error("invalid msg ID " + msgID)
-    }
-   
-    formData.append('id', msgID);
-
-    // console.log("id", id)
-
-    const response = await fetch("/msg/remove", {
-        method: 'post',
-        body: formData,
-        credentials: 'include', // Enables session
-    })
-
-    // console.log("id", id)
-
-    const data = await response.json();
-
-    if("error" in data){
-        alert(data['error']);
-        return;
-    }else if("remove" in data){
-
-        document.getElementById(data['remove']).remove()
-        
-    }else  if("alert" in data){
-        alert(data['alert']);
-        return;
-    }else if("msg" in data){
-        console.log(data['msg']);
-    }
-
-   document.getElementById(containerID).remove();
-
 }
 

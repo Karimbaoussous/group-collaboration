@@ -52,8 +52,8 @@
             if (! $this->validateData($data, [
                 'username'      => 'required|max_length[255]|min_length[1]',
                 'email'         => 'required|max_length[255]|min_length[1]',
-                'password'      => 'required|max_length[255]|min_length[1]',
-                'cPassword'     => 'required|max_length[255]|min_length[1]',
+                'password'      => 'required|max_length[255]|min_length[8]',
+                'cPassword'     => 'required|max_length[255]|min_length[8]',
             ])) {
                 return $this->index(); // The validation fails, so return to login.php
             }
@@ -84,12 +84,20 @@
             );
 
             $user["code"] = $randomInts;
-            session()->set("user", $user);
-            
+
+            session()->set(data: "tempUser", value: $user);
+
 
             return view("VConfirm/ConfirmView", array( 
                 "action" => "/signUp/confirmation",
-                "title" => "Sign up"
+                "title" => "Sign up validation",
+                "email" => $user["email"],
+                "progressBarData" => array(
+                    "max"       => 1,
+                    "currently" => 1,
+                    "color0"    => "var(--gray)",
+                    "color1"    => "var(--blue)"
+                )
             ));
 
 
@@ -124,7 +132,7 @@
             $code = "$num1$num2$num3$num4";
 
             // load validation data
-            $user = session()->get("user");
+            $user = session()->get(key: "tempUser");
             
             if( $code == $user["code"]){
                 
@@ -142,7 +150,7 @@
                 }
 
                 // clear session for security reasons
-                session()->remove("user");
+                session()->remove("tempUser");
 
                 // save data in session
                 session()->set("user",

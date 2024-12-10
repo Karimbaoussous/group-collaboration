@@ -29,6 +29,7 @@
         gap: var(--gap-h);
         
         max-width: var(--max-msg-width);
+        min-width: var(--min-msg-width);
 
     }
 
@@ -79,6 +80,25 @@
     }
 
 
+    .leftMsgContainer .btnsContainer{
+
+        display: flex;
+        gap: var(--gap-h);
+        text-transform: capitalize;
+
+    }
+
+    .leftMsgContainer .time{
+
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        color: var(--white);
+        font-size: small;
+    }
+
+
+
 </style>
 
 
@@ -88,10 +108,12 @@
     <img src="<?= isset($src)? esc(data: $src): null ?>" alt="profile image">
 
     <div  class="leftMsgSubContainer" 
+    
         <? if(esc($isAdmin)):?>
             onmouseenter="handleLeftMsgContainerMouseEnter(this)"
             onmouseleave="handleLeftMsgContainerMouseLeave(this)"
         <? endif; ?>  
+
     >
 
         <div class="leftMsg">
@@ -100,9 +122,13 @@
                 <?=esc(data: $sender)?>
             </bdi> 
 
-            <bdi class="content">
+            <bdi class="content" >
                 <?=esc(data: $body)?>
             </bdi>
+
+            <div class="time">
+                <?= esc($time)?>
+            </div>
 
         </div>
 

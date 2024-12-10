@@ -14,8 +14,9 @@
         function __construct() {
 
             helper('form');
-
             $this->emailVal = new EmailValidator();
+
+            // session()->destroy();
 
         }
     
@@ -23,9 +24,14 @@
         // Login
         public function index() {
 
+            $tempUser = session()->get("tempUser");
+            if($tempUser){
+                session()->remove(key: "tempUser");
+            }
+
             $user = session()->get("user");
 
-            if($user && $user["loggedIn"]){
+            if($user && isset($user["loggedIn"])){
 
                 return redirect()->to('/chat');
 

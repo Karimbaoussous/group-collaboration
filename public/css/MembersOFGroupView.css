@@ -73,7 +73,9 @@
 
 .groupMembersView .groupInfos .mainInfos .img{
 
-    height: 15dvh;
+    --size:  15dvh;
+    height: var(--size);
+    width: var(--size);
     overflow: hidden;
 
 }
@@ -85,6 +87,7 @@
     height: 100%;
     object-fit: contain;
     border-radius: 50%;
+    background: var(--white);
 
 }
 
@@ -95,6 +98,7 @@
     background-color: var(--black-30);
     color: var(--black-200);
     text-transform: capitalize;
+    text-align: center;
 
 }
 
@@ -106,7 +110,7 @@
     flex-direction: column;
     gap: var(--gap-h);
 
-    height: 58dvh;;
+    /* height: 58dvh;*/
     overflow-y: auto;
 
 }

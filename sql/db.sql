@@ -25,7 +25,6 @@ create table if not exists user(
     link2 varchar(255),
     link3 varchar(255),
     link4 varchar(255)
-   
 );
 
 
@@ -67,6 +66,7 @@ create table if not exists send(
 	foreign key (grp) references grp(id)
 );
 
+use groupCollab;
 select * from send;
 
 
@@ -86,7 +86,6 @@ select * from joinGroup;
 
 
 
-
 create table if not exists created(
     user int,
     grp int,
@@ -100,23 +99,12 @@ create table if not exists created(
 select * from created;
 
 
-insert into grp (title, description, isPublic) values ("hackers" , "Hi!", false);
-insert into grp (title, description, isPublic) values ("gamers" , "Hi!", true);
-insert into grp (title, description, isPublic) values ("singers" , "Hi!", true);
 
-update grp set image = (select image from user where id = 1) where id = 1;
-update grp set image = (select image from user where id = 2) where id = 2;
-update grp set image = (select image from user where id = 3) where id = 3;
+
+use groupCollab;
 
 
 
-
-insert into created (user, grp) values (1, 1), (2, 2), (2, 3);
-
-insert into joinGroup (user, grp)  values (1, 1), (2, 2), (2, 3);
-
--- join the private group
-insert into joinGroup (user, grp)  values (1, (select id from grp where isPublic = false));
 
 -- prevent_multiple_group_creators
 CREATE TRIGGER prevent_multiple_group_creators
@@ -136,4 +124,15 @@ BEGIN
         SET MESSAGE_TEXT = 'This group is already created by another user.';
     END IF;
 END;
+
+
+
+
+
+
+
+
+
+
+
 

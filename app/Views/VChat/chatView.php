@@ -6,10 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 
+    
     <link rel="stylesheet" href="<?= base_url('/css/chatView.css')?>">
     <link rel="stylesheet" href="<?= base_url('/css/global.css')?>">
     <link rel="stylesheet" href="<?= base_url(relativePath: 'css/MembersOFGroupView.css')?>">
+    <link rel="stylesheet" href="<?= base_url(relativePath: 'css/groupView.css')?>">
+    <link rel="stylesheet" href="<?= base_url(relativePath: 'css/NothingView.css')?>">
+ 
+    <link rel="stylesheet" href="<?= base_url(relativePath: 'css/JoinChatView.css')?>">
 
+    <link rel="stylesheet" href="<?= base_url(relativePath: 'css/IconBtnComponent.css')?>">
+    <link rel="stylesheet" href="<?= base_url(relativePath: 'css/GroupInfosView.css')?>">
+    
     <style>
 
         .chatView .left .main .greeting{
@@ -18,6 +26,21 @@
             justify-content: center;
             align-items: center;
             color: var(--white);
+
+        }
+
+        .groupsView{
+
+       
+            display: flex;
+            flex-direction: column;
+            gap: 1dvh;
+
+            background-color: var(--black-10); 
+            /* padding: var(--padding-h) 0 var(--padding-h) 0 ; */
+
+            overflow: hidden;
+
 
         }
 
@@ -30,7 +53,40 @@
 
 <body>
 
+    <script>
+
+        const globalUsername = "<?= esc( data: $user['username']) ?>";
+
+    </script>
+
     <script src="<?= base_url('js/Global.js')?>"></script>
+
+    <script src="<?= base_url("js/UploadImage.js")?>"></script>
+    
+
+    <script src="<?= base_url(relativePath: 'js/ChatView.js')?>"></script>
+
+    <script src="<?= base_url(relativePath: 'js/GroupView.js')?>"></script>
+
+    <script src="<?= base_url(relativePath: 'js/GlobalMsgView.js')?>" ></script>
+    
+    <script src="<?= base_url(relativePath: 'js/IconBtn.js')?>" ></script>
+
+    <script src="<?= base_url('js/RightMsgView.js')?>"></script>
+    
+    <script src="<?= base_url(relativePath: 'js/LeftMsgView.js')?>"></script>
+
+    <script src="<?= base_url(relativePath: 'js/MsgInputView.js')?>"></script>
+
+    <script src="<?= base_url(relativePath: 'js/GroupInfosView.js')?>"></script>
+
+    <script  src="<?= base_url(relativePath: 'js/MembersOFGroupView.js')?>"></script>
+    
+    <script src="<?=base_url(relativePath: 'js/MemberOfGroup.js')?>"></script>
+
+    <script src="<?=base_url(relativePath: 'js/JoinGroupView.js')?>"></script>
+
+
 
     <section class="chatView">
 
@@ -46,6 +102,28 @@
                     "size" => "5dvh"
                 ))
             ?>
+
+            <div style="display: grid; gap: var(--gap-w);">
+
+                <?= 
+                    view("Global/iconBtn", array(
+                        "src" => base_url(relativePath: "icons/people.png"),
+                        "onclick" => "window.location = '".base_url(relativePath: '/grpManage')."'",
+                        "style" => $btnStyle,
+                        "size" => "5dvh"
+                    ))
+                ?>
+
+                <?= 
+                    view("Global/iconBtn", array(
+                        "src" => base_url(relativePath: "icons/join_group.png"),
+                        "onclick" => "window.location = '".base_url(relativePath: '/panel')."'",
+                        "style" => $btnStyle,
+                        "size" => "5dvh"
+                    ))
+                ?>
+
+            </div>
             
             <?= 
                 view("Global/iconBtn", array(
@@ -59,8 +137,13 @@
         </aside>
 
 
-        <?= view("VChat/GroupView/GroupView")?>
+        <aside id="groupsAside" >
 
+            <?= view("VChat/GroupView/GroupView")?>
+
+
+        </aside>
+     
 
         <aside class="left"  id="chatViewLeft">
 
@@ -86,13 +169,13 @@
                     array(
                                             
                         "group" => array(
-                            "title" => "hackers test",
-                            "image" => base_url("img/0"),
-                            "id"    => 10
+                            "title" => '$invitations[0]["title"]',
+                            "image" => '$invitations[0]["image"]',
+                            "id"    => '$invitations[0]["grp"]'
                         ),
                         "user" =>  array(
-                            "username"  => "hamada test",
-                            "image"     => base_url("img/1")
+                            "username"  => '$invitations[0]["username"]',
+                            "image"     => '$invitations[0]["photo"]'
                         )
 
                     )
@@ -102,7 +185,9 @@
 
             <aside class="aside" id="chatViewLeftAside">
 
-                <?= view("VChat/MembersOFGroupView/MembersOFGroupView") ?>
+                <? 
+                    // view("VChat/MembersOFGroupView/MembersOFGroupView") 
+                ?>
                     
             </aside>
 
@@ -112,25 +197,11 @@
     </section>
 
 
-    <script src="<?= base_url('js/RightMsgView.js')?>"></script>
     
-    <script src="<?= base_url(relativePath: 'js/LeftMsgView.js')?>"></script>
+   
 
-    <script src="<?= base_url(relativePath: 'js/MsgInputView.js')?>"></script>
 
-    <script src="<?= base_url(relativePath: 'js/GroupInfosView.js')?>"></script>
-
-    <script  src="<?= base_url(relativePath: 'js/MembersOFGroupView.js')?>"></script>
-    
-    <script src="<?=base_url(relativePath: 'js/MemberOfGroup.js')?>"></script>
-
-    <script src="<?=base_url(relativePath: 'js/JoinGroupView.js')?>"></script>
-
-    <script>
-
-    
-    </script>
-    
+  
 
 </body>
 </html>

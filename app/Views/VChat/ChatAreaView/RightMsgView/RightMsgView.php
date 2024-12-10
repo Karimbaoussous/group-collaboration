@@ -1,4 +1,6 @@
 
+
+
 <style>
 
 
@@ -20,6 +22,7 @@
     .rightMsg{
      
         display: flex;
+        flex-direction: column;
         order: 1;
        
         --border-radius: 1dvw;
@@ -27,10 +30,11 @@
         
         background-color: var(--black-25);
         padding: var(--padding-h);
-        gap: var(--gap-w);
+        gap: var(--gap-h);
 
         max-width: var(--max-msg-width);
-
+        min-width: var(--min-msg-width);
+        
     }
 
 
@@ -60,6 +64,24 @@
         background-color: var(--black-150);
     }
 
+    .rightMsgSubContainer .btnsContainer{
+
+        display: flex;
+        gap: var(--gap-h);
+        text-transform: capitalize;
+
+    }
+
+    .rightMsgSubContainer .time{
+
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        color: var(--white);
+        font-size: small;
+
+    }
+
 
 </style>
 
@@ -67,8 +89,10 @@
 <div class="rightMsgContainer"  id="rightMsgContainer<?= esc($index) ?>">
 
     <div  class="rightMsgSubContainer" 
+    
         onmouseenter="handleRightMsgContainerMouseEnter(this)"
         onmouseleave="handleRightMsgContainerMouseLeave(this)"
+
     >
         
         <div class="rightMsg"> 
@@ -76,6 +100,10 @@
             <bdi class="content">
                 <?=esc(data: $body)?>
             </bdi>
+
+            <div class="time">
+                <?= esc($time)?>
+            </div>
         
         </div>
 

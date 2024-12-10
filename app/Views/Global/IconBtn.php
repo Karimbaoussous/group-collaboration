@@ -1,38 +1,26 @@
 
 
 
-<style>
-
-
-    .globalIconBtn{
-
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-        user-select: none;
-
-    }
-
-
-
-</style>
-
 
 <div 
-    class="globalIconBtn" 
+    class="globalIconBtn <?= isset($class)? esc($class): ''?>" 
 
-    <? if( esc( $onclick ) ):?>
-
+    <? if( isset( $onclick ) ):?>
         onclick="<?= esc(data: $onclick)?>"
-
     <?endif?>
     
-    <?if(esc($style)):?>
-
+    <?if(isset( $style)):?>
         style="<?=esc(data: $style)?>"
-
     <?endif?>
+
+    <?if( isset( $redirect ) ):?>
+        onclick="window.location = '<?= base_url( $redirect); ?>'"
+    <?endif?>
+
+    <?if( isset( $id ) ):?>
+        id=" <?= esc($id); ?> "
+    <?endif?>
+   
 >
 
     <img  
@@ -44,6 +32,10 @@
         src="<?=esc(data: $src)?>" 
         alt="icon"
     >
+
+    <?if(isset($text)):?>
+        <?=esc(data: $text)?>
+    <?endif?>
 
 </div>
 

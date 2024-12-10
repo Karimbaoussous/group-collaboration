@@ -51,7 +51,7 @@
                     "Global/alert", 
                     array(
                         "msg" => "email doesn't exist",
-                        "redirect" => 'signUp/'
+                        "redirect" => 'forgot/'
                     )
                 );
             
@@ -67,17 +67,36 @@
                 $randomInts
             );
 
-            // echo   $status ."<br>";
+            if(gettype($status) == 'string'){
 
+                echo $status;
+                return view(
+                    "Global/alert", 
+                    array(
+                        "msg" =>  "We cannot sent an email at the moment!",
+                        "redirect" => 'login/'
+                    )
+                );
+            
+            }
+
+
+            // echo   "
+            //     <script>
+            //         console.log('uncomment code above');
+            //         console.log('$randomInts');
+            //     </script>
+            // ";
 
             $user["code"] = $randomInts;
 
-            session()->set( "user",  value: $user);
+            session()->set( data: "tempUser",  value: $user);
 
             return view("VConfirm/ConfirmView",
                 array(
                     "action"    => '/forgot/confirmation',
-                    "title"     => 'Password Validation'
+                    "title"     => 'Password Validation',
+                    "email" => $user["email"]
                 )
 
             );
@@ -114,19 +133,31 @@
             $num3 = $post['number3'];
             $num4 = $post['number4'];
 
-            $code = "$num1$num2$num3$num4";
+            $codeEntered = "$num1$num2$num3$num4";
 
             // load validation data
-            $user = session()->get("user");
+            $user = session()->get(key: "tempUser");
+
+            if(!isset($user["code"])){
+                
+                return view(
+                    "Global/alert",
+                    array(
+                        "msg" => "Invalid data",
+                        "redirect" => "forgot/"
+                    )
+                );
+            }
             
-            if( $code == $user["code"]){
+            if($user["code"] == $codeEntered){
 
                 // clear session for security reasons
-                session()->remove(key: "user");
+                session()->remove(key: "tempUser");
 
                 // save data in session
-                session()->set("user",
-                    array(
+                session()->set(
+                    data: "tempUser",
+                    value: array(
                         "email"     =>$user["email"],
                         "loggedIn"  => true
                     )
@@ -140,7 +171,7 @@
                     "Global/alert",
                     array(
                         "msg" => "The code is incorrect",
-                        "redirect" => "/forgot/confirmation"
+                        "redirect" => "forgot/"
                     )
                 );
 
@@ -152,7 +183,7 @@
 
         public function change(){
 
-            $user = session()->get(key: "user");
+            $user = session()->get(key: "tempUser");
 
             if(
                 !$user || 
@@ -175,7 +206,7 @@
             // Checks whether the submitted data passed the validation rules.
             if (! $this->validateData($data, [
                 'newPassword'   => 'required|max_length[255]|min_length[1]',
-                'CNewPassword'   => 'required|max_length[255]|min_length[1]',
+                'CNewPassword'   => 'required|max_length[255]|min_length[1]|matches[newPassword]',
             ])) {
                 return view("VChangePassword/changePasswordView");
             }
@@ -197,7 +228,7 @@
             }
 
             // clear session for security reasons
-            session()->remove(key: "user");
+            session()->remove(key: "tempUser");
 
             $user = $this->userModel->getUserByEmail($user["email"]);
 

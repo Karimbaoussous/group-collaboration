@@ -49,10 +49,15 @@
 }
 
 .rightMsgContainer .optionsBtn{
+
     display: flex;
+    align-items: center;
 
     cursor: pointer;
     border-radius: var(--padding-h);
     padding: var(--padding-h);
     background-color: var(--black-150);
+
 }
+
+

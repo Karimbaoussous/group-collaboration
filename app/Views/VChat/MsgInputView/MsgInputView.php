@@ -21,6 +21,14 @@
         border-radius: var(--padding-h);
 
     }
+
+
+    .msgInputView .btns{
+
+        display: flex;
+        gap: var(--gap-w);
+
+    }
     
 
 </style>
@@ -30,14 +38,18 @@
 
     <input  type="text" class="msg" id="msgInputViewMsg" placeholder="Hi!" >
     
-    <?= 
-        view("Global/iconBtn", array(
-            "src"       => base_url(relativePath: "icons/send.png"),
-            "onclick"   => "handleSendMsgBtnClick()",
-            "style"     =>  "background: var(--white); border-radius: 25%; padding: var(--padding-h);",
-            "size"      => "4dvh"
-        ))
-    ?>
+    <div class="btns" id="msgInputViewBtns">
+
+        <?= 
+            view("Global/iconBtn", array(
+                "src"       => base_url(relativePath: "icons/send.png"),
+                "onclick"   => "handleSendMsgBtnClick()",
+                "style"     =>  "background: var(--white); border-radius: 25%; padding: var(--padding-h);",
+                "size"      => "4dvh", 
+            ))
+        ?>
+
+    </div>
 
 
 </footer>

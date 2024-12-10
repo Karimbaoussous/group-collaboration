@@ -15,6 +15,10 @@
 
             $this->userInSession = session()->get('user');
 
+            if(!$this->userInSession){
+                throw new Exception("Something went wrong, You must login again!");
+            }
+
             $this->groupModel = new GroupModel();
 
             $this->userModel = new UserModel();
@@ -39,14 +43,20 @@
                     );
                 }
             
-                $groupData = session()->get("group");
+                $groupInSession = session()->get("group");
 
-                if(!$groupData){
+                if(!$groupInSession){
                     return $this->response->setJSON(
                         array( 'error' => 'an error acquired while loading members')
                     );
                 }
 
+                // $group =  $this->groupModel->getByID($groupID);
+
+                // print_r( $group);
+                // return;
+
+                $groupInSession['image'] = $this->img->getLink($groupID, "group");
 
                 $members =  $this->groupModel->getJoinedMembers($groupID);
 
@@ -61,8 +71,9 @@
                 $htmlMSG = view(
                     name: "VChat/MembersOFGroupView/MembersOFGroupView", 
                     data: array(
-                        "group" => $groupData,
+                        "group" => $groupInSession,
                         "members" => $members,
+                        "userID" => $this->userInDB["id"],
                         "isAdmin" => (
                             $this->groupModel->getCreator($groupID)['id'] == $this->userInDB['id']
                             // true
@@ -94,7 +105,7 @@
 
                 $search = $this->request->getPost(index: 'search');
 
-                $groupData = session()->get("group");
+                $groupData = session()->get(key: "group");
 
 
                 if(!$groupData){
@@ -144,7 +155,8 @@
                         "VChat/MembersOFGroupView/MemberOfGroupView", 
                         array(
                             "member" => $member,
-                            "isAdmin" => $isAdmin
+                            "isAdmin" => $isAdmin,
+                            "userID" => $this->userInDB["id"],
                         )
                     );
                     
@@ -154,8 +166,7 @@
                 return $this->response->setJSON(
                     array( 
                         'html' =>  $htmlMSG,
-                        "membersNumber" => sizeof($members),
-                        "isAdmin" => $isAdmin
+                        "membersNumber" => sizeof($members)
                     )
                 );
 
@@ -177,6 +188,12 @@
 
                 $memberID = $this->request->getPost(index: 'id');
 
+                if(!is_numeric($memberID)){
+                    return $this->response->setJSON(
+                        array('alert' => "unknown member to remove")
+                    );
+                }
+
                 $groupData = session()->get("group");
 
                 if(!$groupData){
@@ -187,13 +204,25 @@
 
                 $groupID = $groupData['id'];
 
-                $isAdmin =  (
-                    $this->groupModel->getCreator( $groupID)['id'] == $memberID
+                $admin =  $this->groupModel->getCreator( $groupID);
+
+                $isMemberAdmin =  (
+                    $admin['id'] == $memberID
                 );
             
-                if($isAdmin){
+                if($isMemberAdmin){
                     return $this->response->setJSON(
                         array( 'alert' => 'you cant remove this member')
+                    );
+                }
+
+                $currentUser = $memberID == $this->userInDB['id']; // the current user wanna remove him self
+                $isAdmin = $admin['id'] ==  $this->userInDB['id']; // the current user is admin
+
+                if(!($currentUser ||  $isAdmin) ){
+                    return $this->response->setJSON(
+                        array( 'alert' => 
+                        "you are not allowed to do this action $currentUser - $isAdmin - $memberID - ". $this->userInDB['id'])
                     );
                 }
 
@@ -202,12 +231,19 @@
                     $memberID
                 );
 
-                if(!$status){
+
+                // return $this->response->setJSON(
+                //     array( 
+                //         'msg' =>  $status,
+                //     )
+                // );
+
+                if( gettype($status) == 'string' ){
 
                     // echo $data;
                     return $this->response->setJSON(
                         array( 
-                            'alert' =>  "failed to removing a member",
+                            'error' =>  "$status",
                         )
                     );
 
@@ -230,8 +266,6 @@
             }
             
         }
-
-
 
     
     }

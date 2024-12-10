@@ -66,5 +66,12 @@ function handleJoinChatRemoveBtnClick(){
     const container = document.getElementById("JoinChatView");
     container.remove()
 
+    const chatViewLeftMain = document.getElementById("chatViewLeftMain");
+    chatViewLeftMain.innerHTML =  `
+        <div class="greeting">
+            what's up ${globalUsername} , let's chat
+        </div>
+    `
+
 }
 

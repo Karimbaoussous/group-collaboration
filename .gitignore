@@ -137,26 +137,30 @@ MYREADEME.md
 test.*
 
 
-public/imgs/*
-*.png
-*.webp
+# public/imgs/*
+# *.png
+# *.webp
 
 design/
  
-public/icons/*
+# public/icons/*
 
+frontend/
 frontend/public
 frontend/.vscode
 frontend/node_modules
 
-*.ico
-public/frontend
 
-app/Views/frontend
+*.ico
+
+# public/frontend
+# app/Views/frontend
 
 readme/
 
-frontend/
+
+
+writable/*
 
 
 

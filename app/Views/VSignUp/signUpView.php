@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SignIn</title>
+    <title>Sign up</title>
 
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -13,7 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="<?php echo base_url('css/global.css'); ?>">
-    <link rel="stylesheet" href="<?php echo base_url('css/signInView.css'); ?>">
+    <link rel="stylesheet" href="<?php echo base_url('css/signUpView.css'); ?>">
 
 </head>
 <body>
@@ -65,35 +65,19 @@
                     "tittle"=> 'Google'
                 ));
             ?>
-        
-            <?= view("Global/GoogleBtnGlass", array(
-                    "href"=>'login/',
-                    "tittle"=> 'Login'
-                ));
-            ?>
                 
         </div>
+
+        <div class="footer">
+           you have an account? <a href="/login/">Login</a>
+        </div>
+
 
 
     </form>
 
 
-    <script >
-       
-        function checkPassword(){
-
-            let p1 =  document.signUpForm.password.value;
-            let p2 = document.signUpForm.cPassword.value;
-
-            const IS_VALID = p1 === p2;
-            // console.log(IS_VALID, p1, p2)
-            if(!IS_VALID) alert("incorrect password")
-            
-            return IS_VALID;
-
-        } 
-
-    </script>
+    <script src="<?= base_url(relativePath: "js/signUpView.js")?>"></script>
 
 
 </body>

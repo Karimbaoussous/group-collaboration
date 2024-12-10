@@ -5,13 +5,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Design by foolishdeveloper.com -->
-    <title>Glassmorphism login Form Tutorial in html css</title>
+
+    <!-- Design by foolishdeveloper.com -->
+     
+    <title>Login</title>
  
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
- 
+    
+    <link rel="stylesheet" href="<?php echo base_url(relativePath: 'css/global.css'); ?>">
     <link rel="stylesheet" href="<?php echo base_url(relativePath: 'css/LoginCSS.css'); ?>">
 
 </head>
@@ -37,15 +40,17 @@
 
         <div class="row">
             <label for="password">Password</label>
-            <input type="password" name="password" placeholder="Password" value="kzcode47k@gmail.com">
+            <input type="password" name="password" placeholder="Password" value="Kzcode47k@gmail.com">
         </div>
 
 
         <div class="lastRow">
             <a href="/forgot/">Forgot password?</a>
         </div>
-
+        
+     
         <button>Log In</button>
+    
 
         <div class="social">
             
@@ -54,13 +59,12 @@
                     "tittle"=> 'Google'
                 ));
             ?>
-           
-            <?= view("Global/GoogleBtnGlass", array(
-                    "href"=>'signUp/',
-                    "tittle"=> 'Sign up'
-                ));
-            ?>
                 
+        </div>
+
+
+        <div class="footer">
+            Don't you have an account? <a href="/signUp/">Sign up</a>
         </div>
 
         

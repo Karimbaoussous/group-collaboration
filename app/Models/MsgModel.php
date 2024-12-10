@@ -69,6 +69,38 @@
         }
 
 
+
+        public function updateMsg($msgID, $content){
+
+            if(!(is_numeric($msgID))){
+               return "msgID is not a number"; 
+            }
+
+            try{
+
+
+                $this->db->query(
+                    "
+                        update msg 
+                        set 
+                            body = ? 
+                        where 
+                            id = ?;
+                    ", array(
+                        $content, $msgID
+                    )
+                );
+
+                return true;
+
+            }catch(Exception $e ){
+                
+                return "Error deleting message: " . $e->getMessage();
+
+            }
+            
+        }
+
         public function remove($msgID, $groupID){
 
             if(!(is_numeric($msgID) && is_numeric($groupID))){
@@ -202,6 +234,32 @@
             }
             
         }
+
+        
+        public function getSentDate($groupID, $msgID){
+        
+            try{
+
+                $query = $this->db->query("
+                    select date from send 
+                    where grp = ? and msg = ?
+                ",
+                    binds: array( $groupID, $msgID)
+                );
+
+                // will return message it self only
+                $date = new DateTime($query->getRowArray()['date']);
+               
+                return $date->format("Y-m-d");
+                
+            }catch(Exception $e ){
+
+                return false;
+
+            }
+            
+        }
+
 
 
     }
