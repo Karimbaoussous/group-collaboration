@@ -1,3 +1,31 @@
+
+# Steps to run the app
+
+- run in cmd
+  > git init
+
+- run in cmd
+  > git clone https://github.com/Karimbaoussous/group-collaboration.git
+
+- install [composer](https://getcomposer.org/download/)
+  
+- run in cmd
+  >  composer install
+
+- You `must` activate `google oauth` using `your own API key` following this [tutorial](https://codeshack.io/implement-google-login-php/)
+  
+- You `must` update the `.env` file with `your own Google oauth API key`
+  
+- To use `email services` you `must` user an email that has this option [Access to less secure applications](https://www.google.com/search?q=how+to+activate+Access+to+less+secure+applications+google&sca_esv=6998cc71aa68975d&sxsrf=ADLYWIJvkFUXwTZKijQYkkXuc0p9O4ZQqA%3A1733947681172&ei=IfFZZ_-OCruqxc8P96fC0Ao&ved=0ahUKEwi_o-G8wqCKAxU7VfEDHfeTEKoQ4dUDCBA&uact=5&oq=how+to+activate+Access+to+less+secure+applications+google&gs_lp=Egxnd3Mtd2l6LXNlcnAiOWhvdyB0byBhY3RpdmF0ZSBBY2Nlc3MgdG8gbGVzcyBzZWN1cmUgYXBwbGljYXRpb25zIGdvb2dsZTIFECEYoAFIyUxQ_gdYqiZwAXgAkAEAmAG9AqAB7xmqAQgwLjE2LjEuMbgBA8gBAPgBAZgCC6AC2g3CAgoQABiwAxjWBBhHwgIHECMYsAIYJ8ICCBAAGIAEGKIEwgIIECEYoAEYwwTCAgoQIRigARjDBBgKwgIEECEYCpgDAIgGAZAGCJIHBDEuMTCgB51p&sclient=gws-wiz-serp)
+
+- You `must` update the `.env` file with `your own email and it password`
+  
+- run in cmd
+  >  php spark serve
+
+- done
+  > http://localhost:8080/
+
 # CodeIgniter 4 Application Starter
 
 ## What is CodeIgniter?
